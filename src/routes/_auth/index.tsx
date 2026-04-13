@@ -5,9 +5,9 @@ import { SectionCards } from '#/components/section-cards'
 import { SiteHeader } from '#/components/site-header'
 import { SidebarInset, SidebarProvider } from '#/components/ui/sidebar'
 import { createFileRoute } from '@tanstack/react-router'
-import data from "#/app/dashboard/data.json"
+import data from "data.json"
 
-export const Route = createFileRoute('/')({ component: App })
+export const Route = createFileRoute('/_auth/')({ component: App })
 
 function App() {
   return (

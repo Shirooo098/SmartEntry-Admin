@@ -26,6 +26,9 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "#/components/ui/sidebar"
+import { useNavigate, useRouter } from "@tanstack/react-router"
+import { signOut } from "firebase/auth"
+import { auth } from "FirebaseConfig"
 
 export function NavUser({
   user,
@@ -38,6 +41,16 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar()
 
+  const router = useRouter()
+  const navigate = useNavigate()
+  
+  async function handleLogout() {
+    if (window.confirm('Are you sure you want to logout?')) {
+      await signOut(auth)
+      await router.invalidate()
+      navigate({ to: '/signIn' })
+    }
+  }
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -81,22 +94,7 @@ export function NavUser({
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <IconUserCircle />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <IconCreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <IconNotification />
-                Notifications
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
               <IconLogout />
               Log out
             </DropdownMenuItem>

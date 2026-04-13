@@ -30,13 +30,12 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "#/components/ui/sidebar"
+import { onAuthStateChanged, type User } from "firebase/auth"
+import { useEffect, useState } from "react"
+import { auth, db } from "FirebaseConfig"
+import { doc, getDoc } from "firebase/firestore"
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "Dashboard",
@@ -149,6 +148,28 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+    const [user, setUser] = useState<User | null>(auth.currentUser)
+  const [username, setUsername] = useState('')
+
+  useEffect(() => {
+const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      setUser(firebaseUser)
+
+      if (firebaseUser) {
+        const snap = await getDoc(doc(db, 'users', firebaseUser.uid))
+        if (snap.exists()) {
+          setUsername(snap.data().username ?? '')
+        }
+      }
+    })
+    return () => unsubscribe()
+  }, [])
+
+  const userData = {
+    name: username || user?.email?.split('@')[0] || '',
+    email: user?.email ?? '',
+    avatar: user?.photoURL ?? '',
+  }
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -172,7 +193,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={userData} />
       </SidebarFooter>
     </Sidebar>
   )
