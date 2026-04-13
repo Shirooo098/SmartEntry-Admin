@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignInRouteImport } from './routes/signIn'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as AuthIndexRouteImport } from './routes/_auth/index'
+import { Route as AuthVisitorsRouteImport } from './routes/_auth/visitors'
+import { Route as AuthCheckInRouteImport } from './routes/_auth/check-in'
 
 const SignInRoute = SignInRouteImport.update({
   id: '/signIn',
@@ -27,27 +29,49 @@ const AuthIndexRoute = AuthIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthRoute,
 } as any)
+const AuthVisitorsRoute = AuthVisitorsRouteImport.update({
+  id: '/visitors',
+  path: '/visitors',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthCheckInRoute = AuthCheckInRouteImport.update({
+  id: '/check-in',
+  path: '/check-in',
+  getParentRoute: () => AuthRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthIndexRoute
   '/signIn': typeof SignInRoute
+  '/check-in': typeof AuthCheckInRoute
+  '/visitors': typeof AuthVisitorsRoute
 }
 export interface FileRoutesByTo {
   '/signIn': typeof SignInRoute
+  '/check-in': typeof AuthCheckInRoute
+  '/visitors': typeof AuthVisitorsRoute
   '/': typeof AuthIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_auth': typeof AuthRouteWithChildren
   '/signIn': typeof SignInRoute
+  '/_auth/check-in': typeof AuthCheckInRoute
+  '/_auth/visitors': typeof AuthVisitorsRoute
   '/_auth/': typeof AuthIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/signIn'
+  fullPaths: '/' | '/signIn' | '/check-in' | '/visitors'
   fileRoutesByTo: FileRoutesByTo
-  to: '/signIn' | '/'
-  id: '__root__' | '/_auth' | '/signIn' | '/_auth/'
+  to: '/signIn' | '/check-in' | '/visitors' | '/'
+  id:
+    | '__root__'
+    | '/_auth'
+    | '/signIn'
+    | '/_auth/check-in'
+    | '/_auth/visitors'
+    | '/_auth/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -78,14 +102,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthIndexRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_auth/visitors': {
+      id: '/_auth/visitors'
+      path: '/visitors'
+      fullPath: '/visitors'
+      preLoaderRoute: typeof AuthVisitorsRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/check-in': {
+      id: '/_auth/check-in'
+      path: '/check-in'
+      fullPath: '/check-in'
+      preLoaderRoute: typeof AuthCheckInRouteImport
+      parentRoute: typeof AuthRoute
+    }
   }
 }
 
 interface AuthRouteChildren {
+  AuthCheckInRoute: typeof AuthCheckInRoute
+  AuthVisitorsRoute: typeof AuthVisitorsRoute
   AuthIndexRoute: typeof AuthIndexRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
+  AuthCheckInRoute: AuthCheckInRoute,
+  AuthVisitorsRoute: AuthVisitorsRoute,
   AuthIndexRoute: AuthIndexRoute,
 }
 
