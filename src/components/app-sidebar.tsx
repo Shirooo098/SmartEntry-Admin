@@ -1,10 +1,10 @@
 import * as React from "react"
 import {
-  IconChartBar,
   IconDashboard,
   IconInnerShadowTop,
   IconListDetails,
-  IconQrcode
+  IconQrcode,
+  IconShield,
 } from "@tabler/icons-react"
 
 import { NavMain } from "#/components/nav-main"
@@ -40,6 +40,12 @@ const data = {
       url: "/check-in",
       icon: IconQrcode,
     },
+    { 
+      title: 'Admins', 
+      url: '/admins', 
+      icon: IconShield 
+    }
+
   ],
 }
 

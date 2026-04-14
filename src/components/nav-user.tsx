@@ -3,7 +3,7 @@ import {
   IconDotsVertical,
   IconLogout,
   IconNotification,
-  IconUserCircle,
+  IconSettings,
 } from "@tabler/icons-react"
 
 import {
@@ -93,6 +93,11 @@ export function NavUser({
                 </div>
               </div>
             </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => navigate({ to: '/settings' })}>
+                <IconSettings />
+                Settings
+              </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout}>
               <IconLogout />

@@ -13,7 +13,9 @@ import { Route as SignInRouteImport } from './routes/signIn'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as AuthIndexRouteImport } from './routes/_auth/index'
 import { Route as AuthVisitorsRouteImport } from './routes/_auth/visitors'
+import { Route as AuthSettingsRouteImport } from './routes/_auth/settings'
 import { Route as AuthCheckInRouteImport } from './routes/_auth/check-in'
+import { Route as AuthAdminsRouteImport } from './routes/_auth/admins'
 
 const SignInRoute = SignInRouteImport.update({
   id: '/signIn',
@@ -34,21 +36,35 @@ const AuthVisitorsRoute = AuthVisitorsRouteImport.update({
   path: '/visitors',
   getParentRoute: () => AuthRoute,
 } as any)
+const AuthSettingsRoute = AuthSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthRoute,
+} as any)
 const AuthCheckInRoute = AuthCheckInRouteImport.update({
   id: '/check-in',
   path: '/check-in',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthAdminsRoute = AuthAdminsRouteImport.update({
+  id: '/admins',
+  path: '/admins',
   getParentRoute: () => AuthRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthIndexRoute
   '/signIn': typeof SignInRoute
+  '/admins': typeof AuthAdminsRoute
   '/check-in': typeof AuthCheckInRoute
+  '/settings': typeof AuthSettingsRoute
   '/visitors': typeof AuthVisitorsRoute
 }
 export interface FileRoutesByTo {
   '/signIn': typeof SignInRoute
+  '/admins': typeof AuthAdminsRoute
   '/check-in': typeof AuthCheckInRoute
+  '/settings': typeof AuthSettingsRoute
   '/visitors': typeof AuthVisitorsRoute
   '/': typeof AuthIndexRoute
 }
@@ -56,20 +72,30 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_auth': typeof AuthRouteWithChildren
   '/signIn': typeof SignInRoute
+  '/_auth/admins': typeof AuthAdminsRoute
   '/_auth/check-in': typeof AuthCheckInRoute
+  '/_auth/settings': typeof AuthSettingsRoute
   '/_auth/visitors': typeof AuthVisitorsRoute
   '/_auth/': typeof AuthIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/signIn' | '/check-in' | '/visitors'
+  fullPaths:
+    | '/'
+    | '/signIn'
+    | '/admins'
+    | '/check-in'
+    | '/settings'
+    | '/visitors'
   fileRoutesByTo: FileRoutesByTo
-  to: '/signIn' | '/check-in' | '/visitors' | '/'
+  to: '/signIn' | '/admins' | '/check-in' | '/settings' | '/visitors' | '/'
   id:
     | '__root__'
     | '/_auth'
     | '/signIn'
+    | '/_auth/admins'
     | '/_auth/check-in'
+    | '/_auth/settings'
     | '/_auth/visitors'
     | '/_auth/'
   fileRoutesById: FileRoutesById
@@ -109,6 +135,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthVisitorsRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_auth/settings': {
+      id: '/_auth/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthSettingsRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/_auth/check-in': {
       id: '/_auth/check-in'
       path: '/check-in'
@@ -116,17 +149,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthCheckInRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_auth/admins': {
+      id: '/_auth/admins'
+      path: '/admins'
+      fullPath: '/admins'
+      preLoaderRoute: typeof AuthAdminsRouteImport
+      parentRoute: typeof AuthRoute
+    }
   }
 }
 
 interface AuthRouteChildren {
+  AuthAdminsRoute: typeof AuthAdminsRoute
   AuthCheckInRoute: typeof AuthCheckInRoute
+  AuthSettingsRoute: typeof AuthSettingsRoute
   AuthVisitorsRoute: typeof AuthVisitorsRoute
   AuthIndexRoute: typeof AuthIndexRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
+  AuthAdminsRoute: AuthAdminsRoute,
   AuthCheckInRoute: AuthCheckInRoute,
+  AuthSettingsRoute: AuthSettingsRoute,
   AuthVisitorsRoute: AuthVisitorsRoute,
   AuthIndexRoute: AuthIndexRoute,
 }

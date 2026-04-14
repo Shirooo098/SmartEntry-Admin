@@ -19,6 +19,7 @@ import { z } from "zod"
 import { signInWithEmailAndPassword } from "firebase/auth"
 import { useNavigate } from "@tanstack/react-router"
 import { auth } from "FirebaseConfig"
+import { getFirebaseError } from "#/lib/firebase-error"
 
 const loginSchema = z.object({
   email: z.string().email("Enter a valid email address"),
@@ -50,12 +51,7 @@ export function LoginForm({
       await signInWithEmailAndPassword(auth, values.email, values.password)
       navigate({ to: "/" })
     } catch (err: any) {
-      const code = err?.code as string
-      if (code === "auth/user-not-found" || code === "auth/wrong-password" || code === "auth/invalid-credential") {
-        setError("root", { message: "Invalid email or password." })
-      } else {
-        setError("root", { message: "Something went wrong. Please try again." })
-      }
+       setError('root', { message: getFirebaseError(err) })
     }
   }
 

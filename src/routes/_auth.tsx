@@ -7,22 +7,25 @@ export const Route = createFileRoute('/_auth')({
 })
 
 function AuthLayout() {
-  const { isAuthenticated, isInitialLoading } = useAuth()
+  const { isAuthenticated, isInitialLoading, isAdmin } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
-    if (!isInitialLoading && !isAuthenticated) {
+    if (isInitialLoading) return
+
+    if (!isAuthenticated) {
       router.navigate({ to: '/signIn' })
+      return
     }
-  }, [isAuthenticated, isInitialLoading])
 
-  if (isInitialLoading) {
-    return null 
-  }
+    if (!isAdmin) {
+      router.navigate({ to: '/signIn' })
+      return
+    }
+  }, [isAuthenticated, isInitialLoading, isAdmin])
 
-  if (!isAuthenticated) {
-    return null 
-  }
+  if (isInitialLoading) return null
+  if (!isAuthenticated || !isAdmin) return null
 
   return <Outlet />
 }

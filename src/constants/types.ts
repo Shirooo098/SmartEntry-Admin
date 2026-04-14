@@ -13,6 +13,7 @@ export type Visitor = {
   actualTimeOut: Timestamp | null
   visitDate: string
   checkoutDate: string
+  createdAt?: Timestamp | null
 }
 
 export type User = {
@@ -37,3 +38,19 @@ export type Entry = {
 export type VisitorWithUser = Visitor & { user: User | null }
 export type StatusFilter = 'All' | 'Incoming' | 'Visitor-In' | 'Visitor-Out'
  
+
+export type AdminUser = {
+  id: string
+  uid: string
+  email: string
+  username: string
+  role: 'admin'
+  status: 'active' | 'suspended'
+  createdAt?: any
+}
+
+export type CreateAdminInput = {
+    email: string
+    username: string
+    password: string
+}
